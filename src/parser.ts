@@ -48,7 +48,7 @@ class SJ {
      */
     public parse(filePath: string, configPath = ""): string {
         // Make sure our file is a SJ file
-        if (filePath.split(".")[1] !== "sj") throw new Error('The provided file MUST be a SJ file.');
+        if (filePath.split(".").reverse()[0] !== "sj") throw new Error('The provided file MUST be a SJ file.');
         let parsedSJ:string = "";
         let contents = readFileSync(filePath, {encoding: "utf-8"}).toString().split("\n");
         let i = 1; // The current line we are on
