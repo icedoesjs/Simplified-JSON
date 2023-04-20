@@ -2,7 +2,7 @@
   "name": "super-simple-json",
   "version": "1.3.6",
   "description": "All the goodness of JSON but with variables and neater syntaxing",
-  "main": "index.js",
+  "main": "parser.js",
   "directories": {
     "lib": "lib"
   },
