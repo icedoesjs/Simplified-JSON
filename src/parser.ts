@@ -1,6 +1,6 @@
 // Author: icedoeSJs
 // Date: 4/6/2023
-// Version: 1.65.1
+// Version: 1.3.8
 const { readFileSync } = require('fs');
 const { resolve } = require('path');
 const INDENT = /^(?:( )+|\t+)/;
