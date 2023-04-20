@@ -1,8 +1,8 @@
 {
   "name": "sj-json",
-  "version": "1.3.7",
+  "version": "1.3.8",
   "description": "All the goodness of JSON but with variables and neater syntaxing",
-  "main": "parser.js",
+  "main": "src/parser.js",
   "directories": {
     "lib": "lib"
   },
