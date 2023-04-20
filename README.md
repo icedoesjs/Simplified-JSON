@@ -3,8 +3,8 @@
 
 <h2 align ="center">Why?</h2>
 <p align="center"><b>Simplified JSON</b> orignally started out when I was creating a JSON validator, but I kept getting my sytnax wrong because of mistypes. I
-got tires of quotes and colons, I wanted something more simple. I brainstormed if I made a version of JSON how I would want the sytntax, not only to make it 
-easy to write for me but easy to read for people with no experience, but they simply want to edit configs. I added support for variables, booleans are now simple
+got tired of quotes and colons, I wanted something more simple. I brainstormed if I made a version of JSON how I would want the sytntax, not only to make it 
+easy to write for me but easy to read for people with no experience, they simply want to edit configs. I added support for variables, booleans are now simple
 yes and no values and no quotes are needed as type detection is built-in.</p>
 
 <h2 align="center">Usage</h2>
@@ -14,7 +14,7 @@ yes and no values and no quotes are needed as type detection is built-in.</p>
 <p align="center">
   - Comments: !! This is a comment <br>
   - Variable Definitions (non file): *define VarName as VarValue <br>
-  - Variable Definitions (file): *define VarnName as require('file.txt') <br>
+  - Variable Definitions (file): *define VarName as require('file.txt') <br>
   - Variable Usage: key = *VarName* <br>
   - KV Pairs: key = value <br>
   - Objects: See examples (KV pairs in sections MUST be indented) <br>
