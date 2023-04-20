@@ -1,0 +1,20 @@
+{
+  "name": "super-simple-json",
+  "version": "1.3.6",
+  "description": "All the goodness of JSON but with variables and neater syntaxing",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/icedoesjs/Super-Simple-JSON.git"
+  },
+  "keywords": ["JSON", "Variables"],
+  "author": "icedoesjs",
+  "license": "ISC"
+}
