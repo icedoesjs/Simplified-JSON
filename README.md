@@ -12,21 +12,21 @@ yes and no values and no quotes are needed as type detection is built-in.</p>
 
 <h2 align="center">Syntax</h2>
 <p align="center">
-  - Comments: !! This is a comment
-  - Variable Definitions (non file): *define VarName as VarValue
-  - Variable Definitions (file): *define VarnName as require('file.txt')
-  - Variable Usage: key = *VarName*
-  - KV Pairs: key = value
-  - Objects: See examples (KV pairs in sections MUST be indented)
-  - Arrays (multiple items): key = [ArrayItem1, ArrayItem2]
-  - Arrays (single item): key = [ArrayItem1, none]
-  - Null values: nill
-  - Booleans: yes, no
+  - Comments: !! This is a comment <br>
+  - Variable Definitions (non file): *define VarName as VarValue <br>
+  - Variable Definitions (file): *define VarnName as require('file.txt') <br>
+  - Variable Usage: key = *VarName* <br>
+  - KV Pairs: key = value <br>
+  - Objects: See examples (KV pairs in sections MUST be indented) <br>
+  - Arrays (multiple items): key = [ArrayItem1, ArrayItem2] <br>
+  - Arrays (single item): key = [ArrayItem1, none] <br>
+  - Null values: nill <br>
+  - Booleans: yes, no <br>
 </p>
 
 <h2 align="center">Planned features</h2>
 <p align="center">
-  1. Support for variable extraction from JS files
-  2. Support for nested objects
-  3. Type detection in arrays
+  1. Support for variable extraction from JS files <br>
+  2. Support for nested objects <br>
+  3. Type detection in arrays <br>
 </p>
