@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 // Author: icedoeSJs
 // Date: 4/6/2023
-// Version: 1.3.8
+// Version: 1.3.9
 const { readFileSync } = require('fs');
 const { resolve } = require('path');
 const INDENT = /^(?:( )+|\t+)/;
