@@ -8,9 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-// Author: icedoeSJs
+// Author: icedoesjs
 // Date: 4/6/2023
-// Version: 1.3.9
+// Version: 1.4.0
 const { readFileSync } = require('fs');
 const { resolve } = require('path');
 const INDENT = /^(?:( )+|\t+)/;
@@ -24,13 +24,15 @@ const FLOAT = /^[0-9]+(\.)?[0-9]$/;
 let VariablePool = [];
 /**
 * The base SJ parser class
-* @version 1.65.1
+* @version 1.6
 * @author icedoeSJs
 * @description SJ (Simplified JSON) allows you to create readable configs and convert them to JSON when needed
-* @param search_path The path in which SJ will search for required files
+* @property {boolean} quietMode A boolean value indicating if quiet mode is enabled (default: false)
 */
 class SJ {
-    constructor() { }
+    constructor(quietMode = false) {
+        this.quietMode = quietMode;
+    }
     /**
      * Parses a SJ (Simplifed JSON) file to JSON (Javascript Object Notation)
      * @param {string} filePath The file path in which the SJ file is located
@@ -39,6 +41,8 @@ class SJ {
      * @author icedoejs
      * @public
      * @todo Error handling
+     * @todo Nested Objects
+     * @todo Array of Objects
      */
     parse(filePath, configPath = "") {
         // Make sure our file is a SJ file
@@ -50,7 +54,8 @@ class SJ {
         parsedSJ += "{\n"; // Insert opening JSON bracket
         contents.forEach((line) => __awaiter(this, void 0, void 0, function* () {
             if (line === "\r") {
-                console.log(`[LOG] line ${i} contained empty space, skipped`);
+                if (!this.quietMode)
+                    console.log(`[LOG] line ${i} contained empty space, skipped`);
                 return i++;
             }
             ;
@@ -71,7 +76,8 @@ class SJ {
                     let file_value = this.parseFile(file_name, configPath);
                     let var_name = line.split("as")[0].trim().replace("*define", "").trim();
                     this.createVariable(var_name, file_value, true);
-                    console.log(`[LOG] Line ${i} contained variable definition for ${var_name}, extracted from file and added to variable pool.`);
+                    if (!this.quietMode)
+                        console.log(`[LOG] Line ${i} contained variable definition for ${var_name}, extracted from file and added to variable pool.`);
                     return i++;
                 }
                 else if (!line.split("as")[1].trim().includes("require")) {
@@ -79,7 +85,8 @@ class SJ {
                     let var_val = line.split("as")[1].trim();
                     // Add variable definition to pool
                     this.createVariable(var_name, var_val);
-                    console.log(`[LOG] Line ${i} contained a variable definition for ${var_name}, variable added to variable pool.`);
+                    if (!this.quietMode)
+                        console.log(`[LOG] Line ${i} contained a variable definition for ${var_name}, variable added to variable pool.`);
                     return i++;
                 }
             }
@@ -111,7 +118,8 @@ class SJ {
                     section.push({ "key": contents[jump].split("=")[0].trim(), "value": contents[jump].split("=")[1].trim() });
                     jump++;
                 }
-                console.log(`[DEBUG] Loop captured section "${section_name}"`);
+                if (!this.quietMode)
+                    console.log(`[LOG] Loop captured section "${section_name}"`);
                 parsedSJ += `"${section_name}": {\n`;
                 let no_comma = 1;
                 section.forEach(kv => {
@@ -131,7 +139,8 @@ class SJ {
         // Remove trailing comma
         let trailing_comma = parsedSJ.lastIndexOf(",");
         parsedSJ = parsedSJ.slice(0, trailing_comma) + parsedSJ.slice(trailing_comma + 1);
-        console.log(`[LOG] All done, ended on line ${i - 1}.`);
+        if (!this.quietMode)
+            console.log(`[LOG] All done, ended on line ${i - 1}.`);
         return JSON.parse(parsedSJ);
     }
     /**
