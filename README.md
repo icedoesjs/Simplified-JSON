@@ -28,5 +28,5 @@ yes and no values and no quotes are needed as type detection is built-in.</p>
 <p align="center">
   1. Support for variable extraction from JS files <br>
   2. Support for nested objects <br>
-  3. Type detection in arrays <br>
+  3. Array of Objects support <br>
 </p>
