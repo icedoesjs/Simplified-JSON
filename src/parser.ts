@@ -1,6 +1,6 @@
-// Author: icedoeSJs
+// Author: icedoesjs
 // Date: 4/6/2023
-// Version: 1.3.9
+// Version: 1.4.0
 const { readFileSync } = require('fs');
 const { resolve } = require('path');
 const INDENT = /^(?:( )+|\t+)/;
@@ -24,17 +24,20 @@ interface Variable {
  * @private 
  * @author icedoeSJs
  */
-let VariablePool: {name: string, value: any, isFile?: string | boolean }[] = [];
+let VariablePool: { name: string, value: any, isFile?: string | boolean }[] = [];
 
 /**
 * The base SJ parser class
-* @version 1.65.1
+* @version 1.6
 * @author icedoeSJs 
 * @description SJ (Simplified JSON) allows you to create readable configs and convert them to JSON when needed
-* @param search_path The path in which SJ will search for required files
+* @property {boolean} quietMode A boolean value indicating if quiet mode is enabled (default: false)
 */
 class SJ {
-    constructor() {}
+    private quietMode: boolean;
+    constructor(quietMode = false) {
+        this.quietMode = quietMode;
+    }
 
 
     /**
@@ -45,17 +48,19 @@ class SJ {
      * @author icedoejs
      * @public
      * @todo Error handling
+     * @todo Nested Objects
+     * @todo Array of Objects
      */
     public parse(filePath: string, configPath = ""): string {
         // Make sure our file is a SJ file
         if (filePath.split(".").reverse()[0] !== "sj") throw new Error('The provided file MUST be a SJ file.');
-        let parsedSJ:string = "";
-        let contents = readFileSync(filePath, {encoding: "utf-8"}).toString().split("\n");
+        let parsedSJ: string = "";
+        let contents = readFileSync(filePath, { encoding: "utf-8" }).toString().split("\n");
         let i = 1; // The current line we are on
         parsedSJ += "{\n" // Insert opening JSON bracket
-        contents.forEach(async(line: string) => {
+        contents.forEach(async (line: string) => {
             if (line === "\r") {
-                console.log(`[LOG] line ${i} contained empty space, skipped`)
+                if (!this.quietMode) console.log(`[LOG] line ${i} contained empty space, skipped`);
                 return i++;
             };
 
@@ -78,14 +83,14 @@ class SJ {
                     let file_value = this.parseFile(file_name, configPath);
                     let var_name = line.split("as")[0].trim().replace("*define", "").trim();
                     this.createVariable(var_name, file_value, true);
-                    console.log(`[LOG] Line ${i} contained variable definition for ${var_name}, extracted from file and added to variable pool.`);
+                    if (!this.quietMode) console.log(`[LOG] Line ${i} contained variable definition for ${var_name}, extracted from file and added to variable pool.`);
                     return i++;
                 } else if (!line.split("as")[1].trim().includes("require")) {
                     let var_name = line.split("as")[0].trim().replace("*define", "").trim();
                     let var_val = line.split("as")[1].trim();
                     // Add variable definition to pool
                     this.createVariable(var_name, var_val);
-                    console.log(`[LOG] Line ${i} contained a variable definition for ${var_name}, variable added to variable pool.`)
+                    if (!this.quietMode) console.log(`[LOG] Line ${i} contained a variable definition for ${var_name}, variable added to variable pool.`);
                     return i++;
                 }
             }
@@ -112,11 +117,11 @@ class SJ {
                 let section_name = line.trim().replace(":", "");
                 let section = [];
                 // Capture our section, stop when indenting stops
-                while(INDENT.test(contents[jump])) {
-                    section.push({"key": contents[jump].split("=")[0].trim(), "value": contents[jump].split("=")[1].trim()});
+                while (INDENT.test(contents[jump])) {
+                    section.push({ "key": contents[jump].split("=")[0].trim(), "value": contents[jump].split("=")[1].trim() });
                     jump++;
                 }
-                console.log(`[DEBUG] Loop captured section "${section_name}"`);
+                if (!this.quietMode) console.log(`[LOG] Loop captured section "${section_name}"`);
                 parsedSJ += `"${section_name}": {\n`;
                 let no_comma = 1;
                 section.forEach(kv => {
@@ -129,13 +134,13 @@ class SJ {
                 });
                 parsedSJ += "},\n";
                 return i++;
-            } 
+            }
         });
         parsedSJ += "}";
         // Remove trailing comma
         let trailing_comma = parsedSJ.lastIndexOf(",");
         parsedSJ = parsedSJ.slice(0, trailing_comma) + parsedSJ.slice(trailing_comma + 1);
-        console.log(`[LOG] All done, ended on line ${i - 1}.`)
+        if (!this.quietMode) console.log(`[LOG] All done, ended on line ${i - 1}.`);
         return JSON.parse(parsedSJ);
     }
 
@@ -150,7 +155,7 @@ class SJ {
         // Check for Booleans
         if (value.toLowerCase() == "yes") {
             return true;
-        } 
+        }
         if (value.toLowerCase() == "no") {
             return false;
         }
@@ -179,7 +184,7 @@ class SJ {
         if (value.match(/^[0-9]+$/) == null) {
             return `"${value}"`;
         }
-        
+
         // Check if value is float
         if (FLOAT.test(value)) {
             return value;
@@ -188,7 +193,7 @@ class SJ {
         // Check if value is int
         if (value.match(/^[0-9]+$/) !== null) {
             return value;
-        } 
+        }
 
         // Default to string
         return `"${value}"`;
@@ -207,8 +212,8 @@ class SJ {
         let file_value;
         try {
             file_value = readFileSync(resolve(process.cwd() + "\\" + configPath + "\\" + fileName.trim()), "utf-8");
-        } catch(err) {
-            throw new Error(`Unable to locate or open ${fileName.trim()}.`);
+        } catch (err) {
+            throw new  Error(`Unable to locate or open ${fileName.trim()}.`);
             file_value = "";
         }
         return file_value;
@@ -222,7 +227,7 @@ class SJ {
      * @returns {void}
      */
     private createVariable(name: string, value: any, isFile = false): void {
-        let newVar:Variable = {name: name, value: value, isFile: isFile};
+        let newVar: Variable = { name: name, value: value, isFile: isFile };
         VariablePool.push(newVar);
     }
 
