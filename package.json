@@ -1,6 +1,6 @@
 {
   "name": "sj-json",
-  "version": "1.4.0",
+  "version": "1.6.1",
   "description": "All the goodness of JSON but with variables and neater syntaxing",
   "main": "src/parser.js",
   "directories": {
@@ -14,7 +14,13 @@
     "type": "git",
     "url": "https://github.com/icedoesjs/Super-Simple-JSON.git"
   },
-  "keywords": ["JSON", "Variables"],
+  "keywords": [
+    "JSON",
+    "Variables"
+  ],
   "author": "icedoesjs",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "sj-json": "^1.4.0"
+  }
 }
