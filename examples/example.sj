@@ -1,10 +1,10 @@
 !!This is a comment
-*define BotToken as require('token.txt')
+*define SecretToken as require('file.txt')
 *define ProductKey as fakekeyhere 
 !! Variable decliration must be before the use of the variable
 !! Variables tend to go at the top of the file, although it does not matter
 
-bot_token = *BotToken*
+bot_token = *SecretToken*
 product_key = *ProductKey*
 
 
