@@ -1,6 +1,6 @@
 // Author: icedoesjs
 // Date: 4/6/2023
-// Version: 1.4.0
+// Version: 1.6.1
 const { readFileSync } = require('fs');
 const { resolve } = require('path');
 const INDENT = /^(?:( )+|\t+)/;
@@ -28,7 +28,7 @@ let VariablePool: { name: string, value: any, isFile?: string | boolean }[] = []
 
 /**
 * The base SJ parser class
-* @version 1.6
+* @version 1.6.1
 * @author icedoeSJs 
 * @description SJ (Simplified JSON) allows you to create readable configs and convert them to JSON when needed
 * @property {boolean} quietMode A boolean value indicating if quiet mode is enabled (default: false)
@@ -47,7 +47,6 @@ class SJ {
      * @returns {object} The provided SJ file converted to JSON
      * @author icedoejs
      * @public
-     * @todo Error handling
      * @todo Nested Objects
      * @todo Array of Objects
      */
@@ -152,52 +151,49 @@ class SJ {
      * @returns {string} The inputted value converted to its proper type (array, int, float, boolean)
      */
     private getType(value: any): any {
-        // Check for Booleans
-        if (value.toLowerCase() == "yes") {
-            return true;
+        switch(value) {
+            // Boolean checking
+            case value.toLowerCase() == "yes":
+                return true;
+
+            case value.toLowerCase() == "no":
+                return false;
+
+            // End boolean checking
+
+            // Null checking
+            case value.toLowerCase() == "nill":
+                return null;
+
+            // Array checking
+            case value.trim().charAt(0) === "[" && value.trim().charAt(value.length - 1) === "]":
+                let arr_values = value.replace("[", "").replace("]", "").split(",");
+                arr_values.forEach((v: string) => {
+                    let item_index = arr_values.indexOf(v);
+                    if (v.trim() === "none") {
+                        arr_values.splice(item_index, 1);
+                    } else {
+                        arr_values[item_index] = v.trim();
+                    }
+                });
+                return JSON.stringify(arr_values);
+
+            // String checking
+            case value.match(/^[0-9]+$/) == null:
+                return `"${value}"`;
+
+            // Float checking
+            case FLOAT.test(value):
+                return value;
+            
+            // Int checking
+            case value.match(/^[0-9]+$/) !== null:
+                return value;
+
+            // Default to string if no type is found
+            default:
+                return `"${value}"`;
         }
-        if (value.toLowerCase() == "no") {
-            return false;
-        }
-
-        // Check for null (nill)
-        if (value.toLowerCase() == "nill") {
-            return null;
-        }
-
-        // Check for arrays
-        if (value.trim().charAt(0) === "[" && value.trim().charAt(value.length - 1) === "]") {
-            let arr_values = value.replace("[", "").replace("]", "").split(",");
-            arr_values.forEach((v: string) => {
-                let item_index = arr_values.indexOf(v);
-                if (v.trim() === "none") {
-                    arr_values.splice(item_index, 1);
-                } else {
-                    arr_values[item_index] = v.trim();
-                }
-            });
-            return JSON.stringify(arr_values);
-        }
-
-
-        // Check for if type is string 
-        if (value.match(/^[0-9]+$/) == null) {
-            return `"${value}"`;
-        }
-
-        // Check if value is float
-        if (FLOAT.test(value)) {
-            return value;
-        }
-
-        // Check if value is int
-        if (value.match(/^[0-9]+$/) !== null) {
-            return value;
-        }
-
-        // Default to string
-        return `"${value}"`;
-
     }
 
     /**
@@ -216,7 +212,7 @@ class SJ {
             throw new  Error(`Unable to locate or open ${fileName.trim()}.`);
             file_value = "";
         }
-        return file_value;
+        return file_value.trim();
     }
 
     /**
