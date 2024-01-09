@@ -14,7 +14,8 @@ yes and no values and no quotes are needed as type detection is built-in.</p>
 <p align="center">
   - Comments: !! This is a comment <br>
   - Variable Definitions (non file): *define VarName as VarValue <br>
-  - Variable Definitions (file): *define VarName as require('file.txt') <br>
+  - Variable Definitions (TXT file): *define VarName as require('file.txt') <br>
+  - Variable Definitions (JS file): *define VarName as require('file.js') <br>
   - Variable Usage: key = *VarName* <br>
   - KV Pairs: key = value <br>
   - Objects: See examples (KV pairs in sections MUST be indented) <br>
@@ -24,9 +25,15 @@ yes and no values and no quotes are needed as type detection is built-in.</p>
   - Booleans: yes, no <br>
 </p>
 
+<h2 align="center">Notes</h2>
+<p align="center">
+  - Variables extracted from JS files must share the same name as the one defined.
+  - Indentation must be followed
+  - The system will see slowdowns should a large variable definition be present
+</p>
+
 <h2 align="center">Planned features</h2>
 <p align="center">
-  1. Support for variable extraction from JS files <br>
-  2. Support for nested objects <br>
-  3. Array of Objects support <br>
+  1. Support for nested objects <br>
+  2. Array of Objects support <br>
 </p>
