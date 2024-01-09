@@ -1,6 +1,6 @@
 {
   "name": "sj-json",
-  "version": "1.6.1",
+  "version": "1.7",
   "description": "All the goodness of JSON but with variables and neater syntaxing",
   "main": "src/parser.js",
   "directories": {
@@ -22,5 +22,8 @@
   "license": "ISC",
   "dependencies": {
     "sj-json": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.8"
   }
 }

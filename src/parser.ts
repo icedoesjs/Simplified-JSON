@@ -1,6 +1,6 @@
 // Author: icedoesjs
-// Date: 4/6/2023
-// Version: 1.6.1
+// Date: 1/9/2024
+// Version: 1.7
 const { readFileSync } = require('fs');
 const { resolve } = require('path');
 const INDENT = /^(?:( )+|\t+)/;
@@ -77,13 +77,36 @@ class SJ {
                 // Variable definitions (add to variable pool)
                 if (line.split("as")[1].trim().includes("require")) {
                     // Variable definition includes a require
-                    let file_name = line.split("require")[1].replace("(", "").replace(")", "").replace("'", "").replace("'", "");
-                    // Read file and extract variable value
-                    let file_value = this.parseFile(file_name, configPath);
-                    let var_name = line.split("as")[0].trim().replace("*define", "").trim();
-                    this.createVariable(var_name, file_value, true);
-                    if (!this.quietMode) console.log(`[LOG] Line ${i} contained variable definition for ${var_name}, extracted from file and added to variable pool.`);
-                    return i++;
+                    let file_name:string = line.split("require")[1].replace("(", "").replace(")", "").replace("'", "").replace("'", "");
+                    let file_ending:string = file_name.trim().split(".")[1].toLowerCase();
+                    let file_content = this.parseFile(file_name, configPath);
+                    if (file_ending === "txt") {
+                    // Read file and extract variable definition (txt)
+                        let var_name = line.split("as")[0].trim().replace("*define", "").trim();
+                        this.createVariable(var_name, file_content, true);
+                        if (!this.quietMode) console.log(`[LOG] Line ${i} contained variable definition for ${var_name}, extracted from file and added to variable pool.`);
+                        return i++;
+                    } else if (file_ending === "js") {
+                        // Read file, find variable and extract the definition (js)
+                        let var_name = line.split("*define")[1].split("as")[0].trim()
+                        if (!file_content.indexOf(var_name)) {
+                            this.createVariable(var_name, undefined, true);
+                            if (!this.quietMode) console.log(`[LOG] Line ${i} declared ${var_name}, no value was found in the file. Variable has been set to undefined.`)
+                        }
+                        // Find where variable is first declared
+                        let var_value = file_content.substring(file_content.indexOf(var_name) + 1).split("\n")[0].split("=")[1].trim()
+                        // If it is a string (contains quotation characters), remove them and let the system handle type detection.
+                        let str_symbols = ['"', "'", "`"];
+                        if (str_symbols.includes(var_value.charAt(0)) && str_symbols.includes(var_value.charAt(var_value.length -1))) {
+                            // Remove quotes
+                            var_value = var_value.substr(1, var_value.length -2);
+                        }
+                        this.createVariable(var_name, var_value, true);
+                        if (!this.quietMode) console.log(`[LOG] Line ${i} declared ${var_name}, a value was extracted and added to the variable pool. `)
+                        return i++;
+                    } else {
+                        throw new Error(`${file_name} is a ${file_ending} file, which is not supported.`)
+                    }
                 } else if (!line.split("as")[1].trim().includes("require")) {
                     let var_name = line.split("as")[0].trim().replace("*define", "").trim();
                     let var_val = line.split("as")[1].trim();
@@ -204,13 +227,12 @@ class SJ {
      */
     private parseFile(fileName: string, configPath: string): any {
         let file_ending = fileName.trim().split(".")[1];
-        if (file_ending !== "txt") throw new Error("Config files provided MUST be a TXT.");
+        if (file_ending !== "txt" && file_ending !== "js") throw new Error(`${fileName} is not supported for variable extraction.`);
         let file_value;
         try {
             file_value = readFileSync(resolve(process.cwd() + "\\" + configPath + "\\" + fileName.trim()), "utf-8");
         } catch (err) {
             throw new  Error(`Unable to locate or open ${fileName.trim()}.`);
-            file_value = "";
         }
         return file_value.trim();
     }

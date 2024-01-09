@@ -1,11 +1,13 @@
 !!This is a comment
 *define SecretToken as require('file.txt')
+*define variable_to_use as require('file.js')
 *define ProductKey as fakekeyhere 
 !! Variable decliration must be before the use of the variable
 !! Variables tend to go at the top of the file, although it does not matter
 
 bot_token = *SecretToken*
 product_key = *ProductKey*
+js_var = *variable_to_use*
 
 
 sql:
