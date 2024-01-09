@@ -27,9 +27,9 @@ yes and no values and no quotes are needed as type detection is built-in.</p>
 
 <h2 align="center">Notes</h2>
 <p align="center">
-  - Variables extracted from JS files must share the same name as the one defined.
-  - Indentation must be followed
-  - The system will see slowdowns should a large variable definition be present
+  - Variables extracted from JS files must share the same name as the one defined. <br>
+  - Indentation must be followed. <br>
+  - The system will see slowdowns should a large variable definition be present. <br>
 </p>
 
 <h2 align="center">Planned features</h2>
