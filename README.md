@@ -1,5 +1,5 @@
 <h1 align="center">Simplified JSON</h1>
-<p align="center">The JSON we all know and love but neat and support for variables.</p>
+<p align="center">The JSON we all know and love, but variable support built-in</p>
 
 <h2 align ="center">Why?</h2>
 <p align="center"><b>Simplified JSON</b> orignally started out when I was creating a JSON validator, but I kept getting my sytnax wrong because of mistypes. I
